@@ -1,4 +1,4 @@
-
+require('less/toast.less')
 
 function Toast(message, time) {
     this.message = message
