@@ -9,12 +9,12 @@ function Toast(message, time) {
 
 Toast.prototype = {
     creatToast:function() {
-        var template = '<div class="toast">' + this.message + '</div>'
+        let template = '<div class="toast">' + this.message + '</div>'
         this.$toast = $(template)
         $('body').append(this.$toast)
     },
     showToast: function () {
-        var self = this
+        let self = this
         this.$toast.fadeIn(500, function () {
             setTimeout(function () {
                 self.$toast.fadeOut(500, function () {
