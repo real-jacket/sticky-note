@@ -35,6 +35,12 @@ passport.use(new GitHubStrategy({
     }
 ));
 
+//注销
+router.get('/logout', function (req, res, next) {
+    req.session.destroy()
+    res.redirect('/')
+})
+
 /* GET auth page. 登陆路由 */
 router.get('/github',
     passport.authenticate('github'));

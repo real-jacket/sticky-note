@@ -18,33 +18,68 @@ var Note = require('../model/note').Note
 
 router.get('/notes', function (req, res, next) {
   console.log('初始化notes')
-  Note.findAll({raw: true}).then(notes => {
+  var opts = {raw:true}
+  if (req.session && req.session.user) {
+    opts.where = {uid:req.session.id}
+  }
+
+  Note.findAll(opts).then(notes => {
     console.log(notes)
-    res.send({status:0,data:notes})
+    res.send({ status: 0, data: notes })
+  }).catch(() => {
+    res.send({status:1,errorMsg:'数据库异常'})
   })
+  
 })
 
 router.post('/notes/add', function (req, res, next) {
+  if (!req.session || !req.session.user) {
+    return res.send({ status: 1, errorMsg: '请先登陆' })
+  }
+  if (!req.body.note) {
+    return res.send({status:2,errorMsg:'内容不能为空'})
+  }
   var note = req.body.note
-  Note.create({ text: note }).then(notes => {
+  var uid = req.session.id
+  Note.create({ text: note,uid:uid}).then(notes => {
     res.send({ status: 0, data: notes })
+  }).catch(() => {
+    res.send({status:1,errorMsg:'数据库异常或者你没有权限'})
   })
   console.log('add.....')
 })
 
 router.post('/notes/edit', function (req, res, next) {
+  if (!req.session || !req.session.user) {
+    return res.send({status:1,errorMsg:'请先登陆'})
+  }
   var note = req.body.note
   var id = req.body.id
-  Note.update({ text: note },{where:{id:id}}).then(notes => {
-    res.send({ status:0, data: notes })
+  var uid = req.session.id
+  Note.update({ text: note },{where:{id:id,uid:uid}}).then(notes => {
+    if(notes[0] === 0){
+      return res.send({ status: 1,errorMsg: '你没有权限'});
+    }
+    res.send({ status: 0, data: notes })
+  }).catch(function(e){
+    res.send({ status: 1,errorMsg: '数据库异常或者你没有权限'});
   })
   console.log('edit....')
 })
 
 router.post('/notes/delete', function (req, res, next) {
+  if (!req.session || !req.session.user) {
+    return res.send({status:1,errorMsg:'请先登陆'})
+  }
   var id = req.body.id
-  Note.destroy({ where: { id: id } }).then(() => {
-    res.send({status:0})
+  var uid = req.session.id
+  Note.destroy({ where: { id: id,uid:uid} }).then((notes) => {
+    if(notes[0] === 0){
+      return res.send({ status: 1, errorMsg: '你没有权限'});
+    }
+    res.send({status: 0})
+  }).catch(function(e){
+    res.send({ status: 1,errorMsg: '数据库异常或者你没有权限'});
   })
 })
 
