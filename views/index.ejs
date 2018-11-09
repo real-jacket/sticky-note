@@ -2,17 +2,25 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title><%= title %></title>
+    <title>基于express的便利贴</title>
   </head>
   <body>
     <div id="header">
       <a class="add-note" title="添加笔记" href="#"><span class="fa fa-plus"></span> 添加</a>
+      
       <ul class="user-area">
+      <% if(!isLogin){ %>
         <li>
           <a class="login" title="GitHub登录" href="/auth/github"> GitHub登录</a>
         </li>
+      <% } else { %>
+        <li><img src="<%= user.avatar %>" alt=""></li>
+        <li><span title="<%= user.username %>"><%= user.username %></span></li>
+        <li><span class="line"> | </span> </li>
+        <li><a class="logout" href="/auth/logout">注销</a></li>
+      <% } %>
       </ul>
-
+      
     </div>
     <div id="content">
 

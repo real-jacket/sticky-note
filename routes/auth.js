@@ -45,6 +45,12 @@ router.get('/github/callback',
     }),
     function (req, res) {
         console.log(req.user)
+        req.session.user = {
+            id: req.user.id,
+            username: req.user.displayName || req.user.login,
+            avatar: req.user._json.avatar_url,
+            provider: req.user.provider
+        };
         // Successful authentication, redirect home.
         res.redirect('/');
     });

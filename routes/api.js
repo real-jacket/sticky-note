@@ -4,7 +4,8 @@ var Note = require('../model/note').Note
 
 /*
 1、获取所有的note：/api/notes
-2、创建一个note：/api/notes/add :　POST req:{note:"hello world",id} res:{status:0,data;[],status:1,errorMessage:"未找到相关信息"}
+2、创建一个note：/api/notes/add :　POST req:{note:"hello world",id} 
+后台约定响应：res:{status:0,data;[]},{status:1,errorMessage:"未找到相关信息"}
 3、编辑一个note: /api/notes/edit : POST req:{note:"now note",id:noteid}
 4、删除一个note:/api/notes/delete : POST req:{id:noteid}　
 * /
