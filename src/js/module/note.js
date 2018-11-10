@@ -38,8 +38,8 @@ Note.prototype = {
             '<div class="note-ct" contenteditable="true"></div>' +
             '</div>';
         this.$note = $(tpl);
-        this.$note.find('.note-ct').text(this.opts.context);
-        this.$note.find('.username').text(this.opts.username);
+        this.$note.find('.note-ct').html(this.opts.context);
+        this.$note.find('.username').html(this.opts.username);
         this.opts.$ct.append(this.$note);
         if (!this.id) this.$note.css('bottom', '10px'); //新增放到右边
     },
@@ -79,11 +79,13 @@ Note.prototype = {
             if ($noteCt.data('before') != $noteCt.html()) {
                 $noteCt.data('before', $noteCt.html());
                 self.setLayout();
+                console.log(self)
                 if (self.id) {
                     self.edit($noteCt.html())
                 } else {
                     self.add($noteCt.html())
                 }
+                console.log(self)
             }
         });
 
@@ -129,6 +131,7 @@ Note.prototype = {
             })
             .done(function (ret) {
                 if (ret.status === 0) {
+                    self.id = ret.data.id
                     Toast('add success');
                 } else {
                     self.$note.remove();

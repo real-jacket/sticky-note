@@ -32,6 +32,7 @@ var Note = sequelize.define('note', {
 });
 
 // force: true will drop the table if it already exists
+// Note.sync({force:true})
 Note.sync()
 
 module.exports.Note = Note
